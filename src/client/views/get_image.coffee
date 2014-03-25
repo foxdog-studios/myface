@@ -1,6 +1,6 @@
 @IMAGE_WIDTH = 640
 @IMAGE_HEIGHT = 480
-@IMAGE_MIME = 'image/jpeg'
+@IMAGE_MIME = 'image/png'
 
 Template.getImage.rendered = ->
   # 1) Make sure this is only run once per template instance.
@@ -55,6 +55,9 @@ Template.getImage.rendered = ->
   errorCallback = (error) ->
     console.warn "Failed to start video stream: #{ error }"
     Session.set 'hasGetUserMedia', false
+  unless navigator.getUserMedia?
+    Session.set 'hasGetUserMedia', false
+    return
   navigator.getUserMedia options, successCallback, errorCallback
 
 Template.getImage.helpers
@@ -63,6 +66,12 @@ Template.getImage.helpers
 
   photograph: ->
     Session.get 'photograph'
+
+setTurnipImage = (template, callback) ->
+  image = new Image
+  image.src = 'turnip.jpg'
+  image.onload = ->
+    callback(image)
 
 Template.getImage.events
   'click [name="ok"]': (event, template) ->
@@ -75,14 +84,16 @@ Template.getImage.events
 
   'click [name="turnip"]': (event, template) ->
     event.preventDefault()
-    turnip = $('#turnip')[0]
-    template._updatePhotoFromImage turnip
+    setTurnipImage template, (image) =>
+      template._updatePhotoFromImage image
 
   'click [name="turnip-ok"]': (event, template) ->
     event.preventDefault()
-    turnip = $('#turnip')[0]
-    template._updatePhotoFromImage turnip
-    updateUserImage template._ctx
+    setTurnipImage template, (image) =>
+      Meteor.setTimeout ->
+        template._updatePhotoFromImage image
+        updateUserImage template._ctx
+      , 0
 
 
 Template.getImage.destroyed = ->
