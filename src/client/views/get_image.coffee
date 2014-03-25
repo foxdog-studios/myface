@@ -2,28 +2,39 @@
 @IMAGE_HEIGHT = 480
 
 Template.getImage.rendered = ->
-  # Make sure this is only run once per template instance.
+  # 1) Make sure this is only run once per template instance.
   return if @_alreadyCalled?
   @_alreadyCalled = true
 
-  @_video = @find 'video'
-  @_stream = null
-
-  # Create a canvas to use a place to resize the user's photograph.
+  # 2) Create a canvas to use as a place to resize the user's
+  #    photograph.
   @_canvas = document.createElement 'canvas'
   @_canvas.width = IMAGE_WIDTH
   @_canvas.height = IMAGE_HEIGHT
-  ctx = canvas.getContext '2d'
+  ctx = @_canvas.getContext '2d'
 
-  # Take a photograph when the user clicks the video stream.
+  # 3) Video element to show the user their webcam strem.
+  @_video = @find 'video'
+
+  # 4) Hide the webcam stream once the user has taken a photograph and
+  #    we're waiting for the user to accept it.
+  $video = $(@_video)
+  @_hideVideo = Deps.autorun ->
+    if Session.get('photograph')?
+      $video.hide()
+    else
+      $video.show()
+
+  # 5) Take a photograph when the user clicks the video stream.
+  @_stream = null
   @_takePhotograph = (event) =>
     event.preventDefault()
     return unless @_stream?
-    ctx.drawImage @_video, 0, 0, canvas.width, canvas.height
-    Session.set 'photograph', canvas.toDataURL 'image/jpeg'
+    ctx.drawImage @_video, 0, 0, @_canvas.width, @_canvas.height
+    Session.set 'photograph', @_canvas.toDataURL 'image/jpeg'
   @_video.addEventListener 'click', @_takePhotograph, false
 
-  # Request and, if allowed, start streaming the user's webcam.
+  # 6) Request and, if allowed, start streaming the user's webcam.
   options =
     video: true,
     audio: false
@@ -35,14 +46,6 @@ Template.getImage.rendered = ->
     Session.set 'hasGetUserMedia', false
   navigator.getUserMedia options, successCallback, errorCallback
 
-
-  $video = $(@_video)
-  @_hideVideo = Deps.autorun ->
-    if Session.get('photograph')?
-      $video.hide()
-    else
-      $video.show()
-
 Template.getImage.helpers
   hasGetUserMedia: ->
     Session.get 'hasGetUserMedia'
@@ -50,35 +53,40 @@ Template.getImage.helpers
   photograph: ->
     Session.get 'photograph'
 
-  videoClass: ->
-    console.log Session.get 'photograph'
-    if Session.get('photograph')?
-      'hidden'
-
 Template.getImage.events
   'click [name="ok"]': (event, template) ->
     event.preventDefault()
-    Meteor.users.update Meteor.userId(),
-      $set:
-        'profile.image': Session.get 'photograph'
+    updateUserImage template._canvas
 
   'click [name="retake"]': (event, template) ->
     event.preventDefault()
     Session.set 'photograph'
 
 Template.getImage.destroyed = ->
-  # Make sure the user's webcam is deactivated.
+  # Clear session variables used by only this template
+  Session.set 'photograph'
+
+  # Desctruct everything we did in rendered in reverse order.
+
+  # 6) Make sure the user's webcam is deactivated.
   if @_stream?
     @_stream.stop()
     delete @_stream
 
-  # Remove the click listener from the video element.
+  # 5) Remove the click listener from the video element an
   @_video.removeEventListener 'click', @_takePhotograph, false
-  delete @_video
 
-  # Make the canvas can be garabage collected.
+  # 4) Stop hiding and showing the webcam stream.
+  @_hideVideo.stop()
+  delete @_hideVideo
+
+  # Allow objects referenced in 3, 2, and 1 to be garabage collected.
+  delete @_video
   delete @_canvas
+  delete @_alreadyCalled
 
 updateUserImage = (canvas) ->
-  console.log canvas
+  Meteor.users.update Meteor.userId(),
+    $set:
+      'profile.image': Session.get 'photograph'
 
