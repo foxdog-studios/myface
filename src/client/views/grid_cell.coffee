@@ -1,4 +1,7 @@
 Template.gridCell.helpers
+  disabled: ->
+    unless Meteor.user()
+      'disabled'
   style: ->
     cell = Cells.findOne @_id, fields: ownerId: 1
     return unless cell?.ownerId?
