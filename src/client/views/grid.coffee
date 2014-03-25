@@ -13,7 +13,7 @@ Template.grid.helpers
   ownerImage: ->
     owner = Meteor.users.findOne @ownerId
     return unless owner
-    owner.profile.image
+    owner.profile.cellImages[@y][@x].image
 
 Template.grid.events
   'click button': (event) ->
