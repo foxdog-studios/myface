@@ -11,3 +11,7 @@ Template.grid.helpers
       for x in [0...GRID_WIDTH]
         flatCells[y * GRID_WIDTH + x]
 
+  disabled: ->
+    unless Meteor.user()
+      'disabled'
+

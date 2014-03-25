@@ -1,10 +1,12 @@
 <template name="grid">
-  {{#each cells}}
-    <div class="grid-row">
-      {{#each this}}
-        {{> gridCell}}
-      {{/each}}
-    </div>
-  {{/each}}
+  <div class="grid">
+    {{#each cells}}
+      <div class="grid-row">
+        {{#each this}}
+          {{> gridCell}}
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
 </template>
 
