@@ -10,29 +10,31 @@ Template.getImage.rendered = ->
   @_stream = null
 
   # Create a canvas to use a place to resize the user's photograph.
-  canvas = document.createElement 'canvas'
-  canvas.width
+  @_canvas = document.createElement 'canvas'
+  @_canvas.width = IMAGE_WIDTH
+  @_canvas.height = IMAGE_HEIGHT
   ctx = canvas.getContext '2d'
 
-  img = @find 'img'
-
+  # Take a photograph when the user clicks the video stream.
   @_takePhotograph = (event) =>
     event.preventDefault()
     return unless @_stream?
     ctx.drawImage @_video, 0, 0, canvas.width, canvas.height
     Session.set 'photograph', canvas.toDataURL 'image/jpeg'
-
   @_video.addEventListener 'click', @_takePhotograph, false
 
+  # Request and, if allowed, start streaming the user's webcam.
+  options =
+    video: true,
+    audio: false
   successCallback = (stream) =>
     @_stream = stream
     @_video.src = window.URL.createObjectURL stream
-
   errorCallback = (error) ->
     console.warn "Failed to start video stream: #{ error }"
     Session.set 'hasGetUserMedia', false
+  navigator.getUserMedia options, successCallback, errorCallback
 
-  navigator.getUserMedia video: true, successCallback, errorCallback
 
   $video = $(@_video)
   @_hideVideo = Deps.autorun ->
@@ -54,13 +56,13 @@ Template.getImage.helpers
       'hidden'
 
 Template.getImage.events
-  'click [name="ok"]': (event) ->
+  'click [name="ok"]': (event, template) ->
     event.preventDefault()
     Meteor.users.update Meteor.userId(),
       $set:
         'profile.image': Session.get 'photograph'
 
-  'click [name="retake"]': (event) ->
+  'click [name="retake"]': (event, template) ->
     event.preventDefault()
     Session.set 'photograph'
 
@@ -73,4 +75,10 @@ Template.getImage.destroyed = ->
   # Remove the click listener from the video element.
   @_video.removeEventListener 'click', @_takePhotograph, false
   delete @_video
+
+  # Make the canvas can be garabage collected.
+  delete @_canvas
+
+updateUserImage = (canvas) ->
+  console.log canvas
 
