@@ -1,6 +1,6 @@
 Template.gridCell.helpers
   disabled: ->
-    unless Meteor.user()
+    unless Meteor.user()?.profile?.cellImages
       'disabled'
 
   style: ->
