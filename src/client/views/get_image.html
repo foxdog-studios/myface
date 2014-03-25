@@ -10,16 +10,20 @@
         <p class="text-center muted">
           Click/touch to take your photo
           <button class="btn" name="turnip">
-            I'm too shy - make me an anonymous turnip instead
+            Don't take my photo - make me an anonymous turnip instead
           </button>
         </p>
       {{/if}}
-      {{#constant}}
-        <video autoplay></video>
-      {{/constant}}
     {{else}}
-      <p class="text-center text-error">Sorry, we could not access your webcam.</p>
+      <p class="text-center text-error">Sorry, we could not access your webcam.
+        <button class="btn btn-success" name="turnip-ok">
+          You can be turnip though!
+        </button>
+      </p>
     {{/if}}
+    {{#constant}}
+      <video autoplay></video>
+    {{/constant}}
   </div>
 </template>
 

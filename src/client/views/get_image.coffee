@@ -44,6 +44,12 @@ Template.getImage.rendered = ->
     video: true,
     audio: false
   successCallback = (stream) =>
+    # The user could allow the stream after they have left the webcam select
+    # template, so test if the video exists, if it doesn't close the stream
+    # and return.
+    unless @_video?
+      stream.stop()
+      return
     @_stream = stream
     @_video.src = window.URL.createObjectURL stream
   errorCallback = (error) ->
@@ -71,6 +77,12 @@ Template.getImage.events
     event.preventDefault()
     turnip = $('#turnip')[0]
     template._updatePhotoFromImage turnip
+
+  'click [name="turnip-ok"]': (event, template) ->
+    event.preventDefault()
+    turnip = $('#turnip')[0]
+    template._updatePhotoFromImage turnip
+    updateUserImage template._ctx
 
 
 Template.getImage.destroyed = ->
