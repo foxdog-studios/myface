@@ -2,13 +2,14 @@ Template.gridCell.helpers
   disabled: ->
     unless Meteor.user()
       'disabled'
+
   style: ->
     cell = Cells.findOne @_id, fields: ownerId: 1
     return unless cell?.ownerId?
     owner = Meteor.users.findOne cell.ownerId,
       fields:
         'profile.cellImages': 1
-    image = owner.profile?.cellImages[@y]?[@x]?.image
+    image = owner?.profile?.cellImages[@y]?[@x]?.image
     return unless image?
     """
     background: url(#{ image });

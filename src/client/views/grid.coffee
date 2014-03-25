@@ -4,7 +4,6 @@ Template.grid.helpers
       fields:
         x: 1
         y: 1
-      reactive: false
       sort: [['y', 'asc'], ['x', 'asc']]
     flatCells = cursor.fetch()
     for y in [0...GRID_HEIGHT]
