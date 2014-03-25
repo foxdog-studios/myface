@@ -1,2 +1,14 @@
 <template name="grid">
+  {{#each gridRow}}
+    <div class="grid-row">
+    {{#each column}}
+    <button class="grid-button" value="{{_id}}">
+      {{#if owner}}
+        {{owner}}
+      {{else}}
+        Unclaimed
+      {{/if}}
+    </button>
+    {{/each}}
+  {{/each}}
 </template>
