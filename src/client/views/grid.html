@@ -3,11 +3,6 @@
     <div class="grid-row">
     {{#each column}}
     <button class="grid-button" style="{{#if ownerImage}}background: url({{ownerImage}}); background-size: 100% 100%;{{/if}}"value="{{_id}}">
-      {{#if owner}}
-        {{owner}}
-      {{else}}
-        Unclaimed
-      {{/if}}
     </button>
     {{/each}}
   {{/each}}
