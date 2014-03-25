@@ -3,11 +3,16 @@
   {{#if currentUser}}
     {{#if currentUser.profile.image}}
       {{> changePhoto}}
+      {{> grid}}
     {{else}}
       {{> getImage}}
     {{/if}}
   {{else}}
-    Please log in
+    {{#if loggingIn}}
+      logging in...
+    {{else}}
+      Please log in or register
+    {{/if}}
   {{/if}}
 </template>
 
