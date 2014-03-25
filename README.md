@@ -57,7 +57,7 @@ This tutorial tells you how to build a slightly simplified version of MyFace.
 
     `client/views/base.html`
 
-    ```Handlebars
+    ```HTML
     <head>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -66,7 +66,7 @@ This tutorial tells you how to build a slightly simplified version of MyFace.
             content="user-scalable=no, width=device-width, initial-scale=1">
       <title>MyFace - parts of your face online</title>
     </head>
-
+    
     <body>
       <p>Hello</p>
     </body>
@@ -90,7 +90,7 @@ This tutorial tells you how to build a slightly simplified version of MyFace.
 
     `client/views/router.html`
 
-    ```Handlebars
+    ```HTML
     <template name="router">
       {{loginButtons}}
     </template>
@@ -101,7 +101,7 @@ This tutorial tells you how to build a slightly simplified version of MyFace.
 
     `client/views/base.html`
 
-    ```Handlebars
+    ```HTML
     <!-- Snip -->
     <body>
       {{> router}}
