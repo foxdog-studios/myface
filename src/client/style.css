@@ -1,11 +1,22 @@
 #login-buttons {
-  display: block;
+  float: right;
 }
 
 .get-image img,
 .get-image video {
   width: 100px;
   height: 100px;
+}
+
+.grid {
+  margin-left: auto;
+  margin-right: auto;
+  width: 320px;
+}
+
+.grid-row {
+  /* Set to zero so there are no gaps between buttons*/
+  font-size: 0px;
 }
 
 .grid-button {
