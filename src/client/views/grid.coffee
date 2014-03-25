@@ -10,6 +10,11 @@ Template.grid.helpers
         column: columns
     rows
 
+  ownerImage: ->
+    owner = Meteor.users.findOne @ownerId
+    return unless owner
+    owner.profile.image
+
 Template.grid.events
   'click button': (event) ->
     event.preventDefault()
@@ -17,4 +22,5 @@ Template.grid.events
     Cells.update id,
       $set:
         owner: Meteor.user().username
+        ownerId: Meteor.userId()
 
