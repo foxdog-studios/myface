@@ -3,9 +3,16 @@
   line-height: 36px;
 }
 
-[name="change-photo"] {
-  margin: 10px 10px;
-  float: left;
+.top-right {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.top-left {
+  position:absolute;
+  top: 15px;
+  left: 10px;
 }
 
 .get-image img,

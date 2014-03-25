@@ -1,25 +1,25 @@
 <template name="router">
+  <div class="top-right">
   {{loginButtons align="right"}}
+  </div>
+  <h1 class="text-center header">MyFace</h1>
   {{#if currentUser}}
     {{#if currentUser.profile.image}}
       {{> changePhoto}}
     {{else}}
       {{> getImage}}
     {{/if}}
+  {{/if}}
+  {{> grid}}
+  <p class="text-center">
+  {{#if currentUser}}
+    Click on the squares until you are all that remains
   {{else}}
     {{#if loggingIn}}
       logging in...
-    {{else}}
-      Sign in to change the face!
     {{/if}}
   {{/if}}
-  <h1 class="text-center header">MyFace</h1>
-  {{> grid}}
-  {{#if currentUser}}
-  <p class="text-center">
-    Click on the squares until you are all that remains
   </p>
-  {{/if}}
   <p class="text-center">
     Created using <a href="http://meteor.com">Meteor</a>.
     <a href="https://github.com/foxdog-studios/myface">Source code on github</a>
