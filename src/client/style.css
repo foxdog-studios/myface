@@ -5,6 +5,7 @@
 .get-image img,
 .get-image video {
   width: 320px;
+  height: 320px;
   background-color: #ccc;
 }
 
