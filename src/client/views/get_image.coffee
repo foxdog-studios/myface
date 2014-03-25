@@ -31,8 +31,12 @@ Template.getImage.rendered = ->
   @_takePhotograph = (event) =>
     event.preventDefault()
     return unless @_stream?
-    @_ctx.drawImage @_video, 0, 0, @_canvas.width, @_canvas.height
+    @_updatePhotoFromImage(@_video)
+
+  @_updatePhotoFromImage = (image) =>
+    @_ctx.drawImage image, 0, 0, @_canvas.width, @_canvas.height
     Session.set 'photograph', @_canvas.toDataURL IMAGE_MIME
+
   @_video.addEventListener 'click', @_takePhotograph, false
 
   # 6) Request and, if allowed, start streaming the user's webcam.
@@ -40,6 +44,12 @@ Template.getImage.rendered = ->
     video: true,
     audio: false
   successCallback = (stream) =>
+    # The user could allow the stream after they have left the webcam select
+    # template, so test if the video exists, if it doesn't close the stream
+    # and return.
+    unless @_video?
+      stream.stop()
+      return
     @_stream = stream
     @_video.src = window.URL.createObjectURL stream
   errorCallback = (error) ->
@@ -62,6 +72,18 @@ Template.getImage.events
   'click [name="retake"]': (event, template) ->
     event.preventDefault()
     Session.set 'photograph'
+
+  'click [name="turnip"]': (event, template) ->
+    event.preventDefault()
+    turnip = $('#turnip')[0]
+    template._updatePhotoFromImage turnip
+
+  'click [name="turnip-ok"]': (event, template) ->
+    event.preventDefault()
+    turnip = $('#turnip')[0]
+    template._updatePhotoFromImage turnip
+    updateUserImage template._ctx
+
 
 Template.getImage.destroyed = ->
   # Clear session variables used by only this template
