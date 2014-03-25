@@ -1,9 +1,10 @@
 <template name="grid">
-  {{#each gridRow}}
+  {{#each cells}}
     <div class="grid-row">
-    {{#each column}}
-    <button class="grid-button" style="{{#if ownerImage}}background: url({{ownerImage}}); background-size: 100% 100%;{{/if}}"value="{{_id}}">
-    </button>
-    {{/each}}
+      {{#each this}}
+        {{> gridCell}}
+      {{/each}}
+    </div>
   {{/each}}
 </template>
+
