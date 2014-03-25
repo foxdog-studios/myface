@@ -1,0 +1,10 @@
+#login-buttons {
+  display: block;
+}
+
+.get-image img,
+.get-image video {
+  width: 100px;
+  height: 100px;
+}
+

@@ -1,0 +1,19 @@
+<template name="getImage">
+  <div class="get-image">
+    {{#if hasGetUserMedia}}
+      {{#if photograph}}
+        <button name="retake">Retake</button>
+        <button name="ok">OK</button>
+        <img src="{{photograph}}">
+      {{else}}
+        <p>Touch to take</p>
+      {{/if}}
+      {{#constant}}
+        <video autoplay></video>
+      {{/constant}}
+    {{else}}
+      <p>Sorry, we could not access your webcam.</p>
+    {{/if}}
+  </div>
+</template>
+

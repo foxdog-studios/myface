@@ -1,0 +1,14 @@
+<template name="router">
+  {{loginButtons}}
+  {{#if currentUser}}
+    {{#if currentUser.profile.image}}
+      <button name="retake">Retake</button>
+      Logged in and has image
+    {{else}}
+      {{> getImage}}
+    {{/if}}
+  {{else}}
+    Please log in
+  {{/if}}
+</template>
+
