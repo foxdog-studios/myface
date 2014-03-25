@@ -1,5 +1,6 @@
 @IMAGE_WIDTH = 640
 @IMAGE_HEIGHT = 480
+@IMAGE_MIME = 'image/jpeg'
 
 Template.getImage.rendered = ->
   # 1) Make sure this is only run once per template instance.
@@ -11,7 +12,7 @@ Template.getImage.rendered = ->
   @_canvas = document.createElement 'canvas'
   @_canvas.width = IMAGE_WIDTH
   @_canvas.height = IMAGE_HEIGHT
-  ctx = @_canvas.getContext '2d'
+  @_ctx = @_canvas.getContext '2d'
 
   # 3) Video element to show the user their webcam strem.
   @_video = @find 'video'
@@ -30,8 +31,8 @@ Template.getImage.rendered = ->
   @_takePhotograph = (event) =>
     event.preventDefault()
     return unless @_stream?
-    ctx.drawImage @_video, 0, 0, @_canvas.width, @_canvas.height
-    Session.set 'photograph', @_canvas.toDataURL 'image/jpeg'
+    @_ctx.drawImage @_video, 0, 0, @_canvas.width, @_canvas.height
+    Session.set 'photograph', @_canvas.toDataURL IMAGE_MIME
   @_video.addEventListener 'click', @_takePhotograph, false
 
   # 6) Request and, if allowed, start streaming the user's webcam.
@@ -56,7 +57,7 @@ Template.getImage.helpers
 Template.getImage.events
   'click [name="ok"]': (event, template) ->
     event.preventDefault()
-    updateUserImage template._canvas
+    updateUserImage template._ctx
 
   'click [name="retake"]': (event, template) ->
     event.preventDefault()
@@ -82,11 +83,42 @@ Template.getImage.destroyed = ->
 
   # Allow objects referenced in 3, 2, and 1 to be garabage collected.
   delete @_video
+  delete @_ctx
   delete @_canvas
   delete @_alreadyCalled
 
-updateUserImage = (canvas) ->
+updateUserImage = (wCtx) ->
+  # The canvas containing the whole photograph.
+  wCanvas = wCtx.canvas
+
+  # Width and height of the whole photograph.
+  wW = wCanvas.width
+  wH = wCanvas.height
+
+  # Width and height of a cell in the grid.
+  cW = wW / GRID_WIDTH
+  cH = wH / GRID_HEIGHT
+
+  # A canvas on which to create the cell images.
+  cCanvas = document.createElement 'canvas'
+  cCanvas.width = cW
+  cCanvas.height = cH
+  cCtx = cCanvas.getContext '2d'
+
+  # Chop up the whole photograph into the cells
+  cellImages =
+    for y in [0...GRID_HEIGHT]
+      sy = y * cH
+      for x in [0...GRID_WIDTH]
+        sx = x * cW
+        cCtx.drawImage wCanvas, sx, sy, cW, cH, 0, 0, cW, cH
+        x: x
+        y: y
+        image: cCanvas.toDataURL IMAGE_MIME
+
+  # The the whole and cell images
   Meteor.users.update Meteor.userId(),
     $set:
       'profile.image': Session.get 'photograph'
+      'profile.cellImages': cellImages
 

@@ -2,8 +2,7 @@
   {{loginButtons}}
   {{#if currentUser}}
     {{#if currentUser.profile.image}}
-      <button name="retake">Retake</button>
-      Logged in and has image
+      {{> changePhoto}}
     {{else}}
       {{> getImage}}
     {{/if}}
