@@ -3,7 +3,6 @@
   {{#if currentUser}}
     {{#if currentUser.profile.image}}
       {{> changePhoto}}
-      {{> grid}}
     {{else}}
       {{> getImage}}
     {{/if}}
@@ -11,8 +10,9 @@
     {{#if loggingIn}}
       logging in...
     {{else}}
-      Please log in or register
+      Sign in to change the face!
     {{/if}}
   {{/if}}
+  {{> grid}}
 </template>
 

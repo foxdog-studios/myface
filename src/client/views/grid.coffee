@@ -1,4 +1,8 @@
 Template.grid.helpers
+  disabled: ->
+    unless Meteor.user()
+      'disabled'
+
   gridRow: ->
     # Ensure they come out sorted
     cells = Cells.find({}, sort: [['y', 'asc'], ['x', 'asc']]).fetch()
@@ -17,10 +21,12 @@ Template.grid.helpers
 
 Template.grid.events
   'click button': (event) ->
+    user = Meteor.user()
+    return unless user?
     event.preventDefault()
     id = $(event.target).val()
     Cells.update id,
       $set:
-        owner: Meteor.user().username
+        owner: user.username
         ownerId: Meteor.userId()
 
