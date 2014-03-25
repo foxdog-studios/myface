@@ -13,14 +13,14 @@ Template.getImage.rendered = ->
   @_canvas = document.createElement 'canvas'
   @_canvas.width = IMAGE_WIDTH
   @_canvas.height = IMAGE_HEIGHT
-  ctx = canvas.getContext '2d'
+  ctx = @_canvas.getContext '2d'
 
   # Take a photograph when the user clicks the video stream.
   @_takePhotograph = (event) =>
     event.preventDefault()
     return unless @_stream?
-    ctx.drawImage @_video, 0, 0, canvas.width, canvas.height
-    Session.set 'photograph', canvas.toDataURL 'image/jpeg'
+    ctx.drawImage @_video, 0, 0, @_canvas.width, @_canvas.height
+    Session.set 'photograph', @_canvas.toDataURL 'image/jpeg'
   @_video.addEventListener 'click', @_takePhotograph, false
 
   # Request and, if allowed, start streaming the user's webcam.
