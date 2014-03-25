@@ -1,5 +1,11 @@
 #login-buttons {
   float: right;
+  line-height: 36px;
+}
+
+[name="change-photo"] {
+  margin: 10px 10px;
+  float: left;
 }
 
 .get-image img,

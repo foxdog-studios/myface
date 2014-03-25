@@ -1,5 +1,4 @@
 <template name="router">
-  <h1 class="text-center">MyFace</h1>
   {{loginButtons align="right"}}
   {{#if currentUser}}
     {{#if currentUser.profile.image}}
@@ -14,6 +13,7 @@
       Sign in to change the face!
     {{/if}}
   {{/if}}
+  <h1 class="text-center header">MyFace</h1>
   {{> grid}}
   {{#if currentUser}}
   <p class="text-center">
