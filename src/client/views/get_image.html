@@ -2,8 +2,8 @@
   <div class="get-image">
     {{#if hasGetUserMedia}}
       {{#if photograph}}
-        <button name="retake">Retake</button>
-        <button name="ok">OK</button>
+        <button class="btn" name="retake">Retake</button>
+        <button class="btn btn-success" name="ok">OK</button>
         <img src="{{photograph}}">
       {{else}}
         <p>Touch to take</p>
