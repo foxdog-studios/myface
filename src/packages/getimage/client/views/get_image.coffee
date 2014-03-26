@@ -1,6 +1,6 @@
-@IMAGE_WIDTH = 640
-@IMAGE_HEIGHT = 480
-@IMAGE_MIME = 'image/png'
+IMAGE_WIDTH = 640
+IMAGE_HEIGHT = 480
+IMAGE_MIME = 'image/png'
 
 Template.getImage.rendered = ->
   # 1) Make sure this is only run once per template instance.
@@ -40,6 +40,7 @@ Template.getImage.rendered = ->
   @_video.addEventListener 'click', @_takePhotograph, false
 
   # 6) Request and, if allowed, start streaming the user's webcam.
+  return unless Session.get 'hasGetUserMedia'
   options =
     video: true,
     audio: false
@@ -55,9 +56,6 @@ Template.getImage.rendered = ->
   errorCallback = (error) ->
     console.warn "Failed to start video stream: #{ error }"
     Session.set 'hasGetUserMedia', false
-  unless navigator.getUserMedia?
-    Session.set 'hasGetUserMedia', false
-    return
   navigator.getUserMedia options, successCallback, errorCallback
 
 Template.getImage.helpers
