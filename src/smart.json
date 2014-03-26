@@ -1,0 +1,7 @@
+{
+  "packages": {
+    "getimage": {
+      "git": "https://github.com/foxdog-studios/meteor-getimage"
+    }
+  }
+}

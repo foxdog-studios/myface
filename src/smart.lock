@@ -1,0 +1,18 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "getimage": {
+        "git": "https://github.com/foxdog-studios/meteor-getimage",
+        "branch": "master"
+      }
+    },
+    "packages": {
+      "getimage": {
+        "git": "https://github.com/foxdog-studios/meteor-getimage",
+        "branch": "master",
+        "commit": "6c0e30c9aad1518e68b515c8f633afb31b34e405"
+      }
+    }
+  }
+}
